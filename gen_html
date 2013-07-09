@@ -1,0 +1,6 @@
+#!/bin/sh
+
+BASEDIR=`dirname $0`
+. $BASEDIR/config
+if [ "$#" -eq 0 ]; then echo "usage: ./gen_html page\n  page - name of submap for which you want html"; exit; fi;
+$PHP_PATH $STATS_PATH/generate_html.php $1 $STATS_PATH_DATA > $STATS_PATH_OUT/$1.html

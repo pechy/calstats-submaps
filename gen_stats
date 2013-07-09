@@ -1,0 +1,65 @@
+#!/bin/sh
+
+# (c)2003 by Jan Krupa (krupaj@mobilnews.cz)
+# http://www.mobilnews.cz/honza/
+# only php left from calstats, C++ fast pooling by Pechy
+
+BASEDIR=`dirname $0`
+. $BASEDIR/config
+
+
+if [ $STATS_TYPE = "calstats_pooler" ]; then
+    cd $BASEDIR
+    ./calstats_pooler $STATS_PATH_DATA/
+else
+  for LINE in `ls -1 $STATS_PATH_DATA | grep .config`; do
+      a_file=`echo $LINE | awk -F. '{ printf "%s", $1 }'`
+
+      file_comp=$STATS_PATH_DATA/$a_file.comp
+      file_state=$STATS_PATH_DATA/$a_file.state
+      echo $file_state;
+
+      # Get computer states
+      if [ $STATS_TYPE = "fping" ]; then
+	  ping_host_all=""
+
+	  for LINE in `cat $file_comp`; do
+	      ping_host=`echo -n $LINE | awk -F\; '{ printf "%s", $2 }'`
+	      ping_host_all="${ping_host_all} ${ping_host}"
+	  done
+	  $FPING_PATH -e $ping_host_all | awk -F\  '{ printf "%s;", $1; if ($3=="alive") printf "1;%s;\n", substr($4, 2, (length($4)-1)); else printf "0;0;\n"; }' > $file_state
+      fi
+
+      if [ $STATS_TYPE = "ping" ]; then
+	  > $file_state
+	  for LINE in `cat $file_comp`; do
+	      ping_host=`echo -n $LINE | awk -F\; '{ printf "%s", $2 }'`;
+
+	      ping_lat=\;`$PING_PATH -c 1 -w 2 $ping_host | grep rtt | awk -F\  '{ printf "%s", $4 }' | awk -F\/ ' { printf "%s", $2 }'`;
+	      if [ "$ping_lat" = ";" ]; then
+		  ping_lat=\;`$PING_PATH -c 1 -w 2 $ping_host | grep rtt | awk -F\  '{ printf "%s", $4 }' | awk -F\/ ' { printf "%s", $2 }'`;
+	      fi
+
+	      if [ "$ping_lat" = ";" ]; then
+		  echo $ping_host\;0\;0\; >> $file_state
+	      else
+		  echo $ping_host\;1$ping_lat\; >> $file_state
+	      fi
+	  done
+      fi
+
+      if [ $STATS_TYPE = "nmap" ]; then
+	  ping_host_all=""
+
+	  for LINE in `cat $file_comp`; do
+	      ping_host=`echo -n $LINE | awk -F\; '{ printf "%s", $2 }'`
+	      ping_host_all="${ping_host_all} ${ping_host}"
+	  done
+
+	  $NMAP_PATH -vnsP $ping_host_all | awk -F\  '{ if ($1=="Host") { if (match($2, /\(/) == 0) { printf "%s;", $2; } else { printf "%s;", substr($2, 2, (length($2)-2)); } if ($6=="up.") printf "1;0;\n"; else printf "0;0;\n"; } }' > $file_state
+      fi
+  done
+  $PHP_PATH -q $STATS_PATH/submap.php $STATS_PATH_DATA/
+fi
+
+$PHP_PATH -q $STATS_PATH/calstats.php $STATS_PATH_DATA/ $STATS_PATH_OUT/
