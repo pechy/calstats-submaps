@@ -1,0 +1,10 @@
+3;GW;CoreSwitch;
+1;CoreSwitch;Switch;
+1;CoreSwitch;Switch;
+41;Server1;Switch;
+41;NServer;Switch;
+41;VServer2;Switch
+41;VServer;Switch
+41;VServer;Switch
+40;BServer;Switch
+60;Server1;RServer
