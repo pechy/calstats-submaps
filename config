@@ -3,12 +3,11 @@ PING_PATH=ping
 NMAP_PATH=nmap
 FPING_PATH=fping
 
-STATS_PATH="/home/pechy/calstats_better"
-
 #paths should not end with /
+
+STATS_PATH="."
 STATS_PATH_DATA=$STATS_PATH"/data"
-STATS_PATH_TMP=$STATS_PATH"/tmp"
 STATS_PATH_OUT=$STATS_PATH"/out"
 
-# STATS_TYPE - ping, fping, nmap or calstats_pooler (experimental)
-STATS_TYPE=fping
+# STATS_TYPE - ping, fping, nmap
+STATS_TYPE=ping

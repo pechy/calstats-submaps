@@ -2,13 +2,13 @@
 
 # (c)2003 by Jan Krupa (krupaj@mobilnews.cz)
 # http://www.mobilnews.cz/honza/
-# only php left from calstats, C++ fast pooling by Pechy
+# Edited by Martin Petracek, 2013
 
 BASEDIR=`dirname $0`
 . $BASEDIR/config
 
 
-if [ $STATS_TYPE = "calstats_pooler" ]; then
+if [ $STATS_TYPE = "Cppooler" ]; then
     cd $BASEDIR
     ./calstats_pooler $STATS_PATH_DATA/
 else

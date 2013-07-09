@@ -1,7 +1,7 @@
-<?
+<?php
 $main=$argv[1];
 $datapath=$argv[2];
-//TODO: add/remove / in the end
+if (substr($datapath,-1)!="/") $datapath.="/";
 
 print '<html>
 <head>
@@ -32,7 +32,7 @@ function calc_submap_position($main_width,$main_height,$submap,$item_x,$item_y,$
   if ($x+$dim_submap[0]<=$main_width &&  $y+$dim_submap[1]<=$main_height) return array($x,$y);
   $x=$item_x-(($dim_submap[0]-$item_width)/2); //top of...
   $y=$item_y-10-$dim_submap[1];
-  if ($x+$dim_submap[0]<=$main_width &&  $y+$dim_submap[1]<=$main_height) return array($x,$y);
+  if ($x+$dim_submap[0]<=$main_width &&  $y-$dim_submap[1]>0) return array($x,$y);
   $x=$item_x-$dim_submap[0]-10; //right of...
   $y=$item_y+5;
   if ($x+$dim_submap[0]<=$main_width &&  $y+$dim_submap[1]<=$main_height) return array($x,$y);
