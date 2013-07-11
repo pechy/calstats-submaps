@@ -9,5 +9,5 @@ STATS_PATH="."
 STATS_PATH_DATA=$STATS_PATH"/data"
 STATS_PATH_OUT=$STATS_PATH"/out"
 
-# STATS_TYPE - ping, fping, nmap
-STATS_TYPE=ping
+# STATS_TYPE - ping, fping, nmap or Cppooler (experimental)
+STATS_TYPE=fping

@@ -10,7 +10,7 @@ BASEDIR=`dirname $0`
 
 if [ $STATS_TYPE = "Cppooler" ]; then
     cd $BASEDIR
-    ./calstats_pooler $STATS_PATH_DATA/
+    ./Cppooler $STATS_PATH_DATA/
 else
   for LINE in `ls -1 $STATS_PATH_DATA | grep .config`; do
       a_file=`echo $LINE | awk -F. '{ printf "%s", $1 }'`
